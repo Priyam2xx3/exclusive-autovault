@@ -38,8 +38,14 @@ const Category = () => {
                 }
 
                 const { data } = await api.get(url);
-                setImages(data);
+                if (Array.isArray(data)) {
+                    setImages(data);
+                } else {
+                    console.error('API returned non-array data:', data);
+                    setError('Error: API did not return data correctly.');
+                }
             } catch (err) {
+                console.error("API Request Error:", err);
                 setError('Failed to load images');
             } finally {
                 setLoading(false);
@@ -49,8 +55,9 @@ const Category = () => {
         fetchImages();
     }, [type, searchQuery]);
 
-    // Format title
-    const title = type === 'all' ? (searchQuery ? `Search Results for "${searchQuery}"` : 'All Collection') : `${type.charAt(0).toUpperCase() + type.slice(1)} Collection`;
+    // Format title safely
+    const displayType = type || 'all';
+    const title = displayType === 'all' ? (searchQuery ? `Search Results for "${searchQuery}"` : 'All Collection') : `${displayType.charAt(0).toUpperCase() + displayType.slice(1)} Collection`;
 
     return (
         <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
