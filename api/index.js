@@ -1,12 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import connectDB from '../src/config/db.js';
-import authRoutes from '../src/routes/authRoutes.js';
-import imageRoutes from '../src/routes/imageRoutes.js';
-import paymentRoutes from '../src/routes/paymentRoutes.js';
-import uploadRoutes from '../src/routes/uploadRoutes.js';
-import path from 'path';
+import connectDB from '../backend/src/config/db.js';
+import authRoutes from '../backend/src/routes/authRoutes.js';
+import imageRoutes from '../backend/src/routes/imageRoutes.js';
+import paymentRoutes from '../backend/src/routes/paymentRoutes.js';
+import uploadRoutes from '../backend/src/routes/uploadRoutes.js';
 
 // Load env vars
 dotenv.config();
@@ -24,11 +23,6 @@ app.use(cors({
 // Stripe webhook needs raw body, so we'll configure that specifically
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Basic route
-app.get('/', (req, res) => {
-    res.send('Exclusive AutoVault API is running...');
-});
 
 // API Routes
 app.use('/api/auth', authRoutes);
