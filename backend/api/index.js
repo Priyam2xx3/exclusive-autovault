@@ -1,11 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import connectDB from './config/db.js';
-import authRoutes from './routes/authRoutes.js';
-import imageRoutes from './routes/imageRoutes.js';
-import paymentRoutes from './routes/paymentRoutes.js';
-import uploadRoutes from './routes/uploadRoutes.js';
+import connectDB from '../src/config/db.js';
+import authRoutes from '../src/routes/authRoutes.js';
+import imageRoutes from '../src/routes/imageRoutes.js';
+import paymentRoutes from '../src/routes/paymentRoutes.js';
+import uploadRoutes from '../src/routes/uploadRoutes.js';
 import path from 'path';
 
 // Load env vars
@@ -36,25 +36,8 @@ app.use('/api/images', imageRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/upload', uploadRoutes);
 
-// Make uploads folder static
-const __dirname = path.resolve();
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
-
-// Serve frontend
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-    app.get('*', (req, res) =>
-        res.sendFile(
-            path.resolve(__dirname, '../', 'frontend', 'dist', 'index.html')
-        )
-    );
-} else {
-    app.get('/', (req, res) => {
-        res.send('Exclusive AutoVault API is running...');
-    });
-}
-
+// Fix static folder serving for serverless functions
+// We omit production frontend serving logic since Vercel handles frontend hosting automatically.
 const PORT = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV !== 'production') {

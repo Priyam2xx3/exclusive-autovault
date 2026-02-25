@@ -1,0 +1,8 @@
+{
+    "name": "exclusive-autovault",
+    "version": "1.0.0",
+    "scripts": {
+        "postinstall": "cd backend && npm install && cd ../frontend && npm install",
+        "build": "cd frontend && npm run build"
+    }
+}
